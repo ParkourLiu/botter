@@ -7,6 +7,8 @@ import (
 	"time"
 	"net/http"
 	"encoding/json"
+	"bytes"
+	"net/url"
 )
 
 func userInfo(token string, userBaseUrl string) {
@@ -59,8 +61,28 @@ func Get(url string, token string) *Request {
 	headMap["token"] = append(headMap["token"], token)
 	client := &http.Client{}
 	resp, _ := client.Do(req)
-	defer resp.Body.Close()
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 
+	var request *Request
+	if err := json.NewDecoder(resp.Body).Decode(&request); err != nil {
+		fmt.Println("错误：", err)
+	}
+	return request
+}
+
+func Post(method string, url string, param string, token string) *Request {
+	fmt.Println("url:", url)
+	fmt.Println("param:", param)
+	req, _ := http.NewRequest(method, url, bytes.NewReader([]byte(param)))
+	headMap := req.Header
+	headMap["token"] = append(headMap["token"], token)
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	var request *Request
 	if err := json.NewDecoder(resp.Body).Decode(&request); err != nil {
 		fmt.Println("错误：", err)
@@ -76,4 +98,32 @@ func json2Map(str string) (map[string]interface{}, error) {
 	} else {
 		return make(map[string]interface{}), err
 	}
+}
+
+//修改用户信息
+func UpdateUser(requestMap *RequestMap) bool {
+	param := []string{}
+	param = append(param, requestMap.Nickname) //名字
+	param = append(param, requestMap.Sign)     //个性签名
+	param = append(param, requestMap.Province) //省份
+	param = append(param, requestMap.City)     //城市
+	param = append(param, requestMap.Area)     //区
+
+	upUserUrl := UpdateUserUrl
+	for _, v := range param {
+		upUserUrl = strings.Replace(upUserUrl, "#", url.QueryEscape(v), 1)
+	}
+	req := Post("PUT", upUserUrl, "{}", XmToken)
+	fmt.Println(req)
+	if req.Status == 200 {
+		return true
+	}
+	return false
+}
+
+//扔瓶子
+func XmThrowBottle(content string) {
+	reqUrl := XmThrowBottleUrl + BottleContent + url.QueryEscape(content)
+	req := Post("POST", reqUrl, "{}", XmToken)
+	fmt.Println(req)
 }
