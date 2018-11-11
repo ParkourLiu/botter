@@ -48,7 +48,7 @@ func main() {
 	//UpdateUser(RequestMap)
 	//req, _ := mysqlClient.SearchMutiRows(&mysql.Stmt{Sql: "SELECT * FROM USER", Args: []interface{}{}})
 	//fmt.Println(req)
-	//bottlesInfo(token, bottlesUrl, userBaseUrl)
-	userInfo(token, userBaseUrl)
+	bottlesInfo(token, bottlesUrl, userBaseUrl)
+	//userInfo(token, userBaseUrl)
 
 }
