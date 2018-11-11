@@ -12,19 +12,25 @@ import (
 )
 
 func userInfo(token string, userBaseUrl string) {
-	for i := 122500; ; i++ {
+	for i := 181195; ; i++ {
 		userUrl := userBaseUrl + fmt.Sprint(i)
 		user := Get(userUrl, token)
 		if user.Status == 200 {
-			fmt.Println(user.Data.User_id, "	", user.Data.Sex, "	", user.Data.Nickname, "	", user.Data.Phone, "	", user.Data.Province, "	", user.Data.City, "	", user.Data.Area)
-			fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/user.txt", os.O_WRONLY|os.O_APPEND, 0666)
+			//添加到数据库
+			err := i_user(&user.Data)
 			if err != nil {
-				fmt.Println(err)
+				fmt.Println("插入数据库错误：", err)
 			}
-			fd_content := strings.Join([]string{fmt.Sprint(i), fmt.Sprint(user.Data.Sex), user.Data.Nickname, user.Data.Phone, user.Data.Province, user.Data.City, user.Data.Area, "\n"}, "	")
-			buf := []byte(fd_content)
-			fd.Write(buf)
-			fd.Close()
+			fmt.Println(user.Data.Id, "	", user.Data.Sex, "	", user.Data.Nickname, "	", user.Data.Phone, "	", user.Data.Province, "	", user.Data.City, "	", user.Data.Area, "	", user.Data.Sign)
+			//向文件后添加文字
+			//fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/user.txt", os.O_WRONLY|os.O_APPEND, 0666)
+			//if err != nil {
+			//	fmt.Println(err)
+			//}
+			//fd_content := strings.Join([]string{fmt.Sprint(i), fmt.Sprint(user.Data.Sex), user.Data.Nickname, user.Data.Phone, user.Data.Province, user.Data.City, user.Data.Area, "\n"}, "	")
+			//buf := []byte(fd_content)
+			//fd.Write(buf)
+			//fd.Close()
 		}
 		if i%500 == 0 {
 			fmt.Println("已到", i)
@@ -41,7 +47,7 @@ func bottlesInfo(token string, bottlesUrl string, userBaseUrl string) {
 			time.Sleep(5 * time.Second)
 			continue
 		}
-		userUrl := userBaseUrl + fmt.Sprint(bottles.Data.User_id)
+		userUrl := userBaseUrl + fmt.Sprint(bottles.Data.Id)
 		user := Get(userUrl, token)
 		fmt.Println(user.Data.Sex, "	", user.Data.Phone, "	", bottles.Data.Nickname, "	", bottles.Data.Province, "	", bottles.Data.City, "	", bottles.Data.Content)
 		fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/data.txt", os.O_WRONLY|os.O_APPEND, 0666)

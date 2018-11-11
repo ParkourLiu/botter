@@ -25,18 +25,19 @@ var (
 
 func init() {
 	logger.SetDefaultLogLevel(1)
-	//mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
-	//UserName:     "root",
-	//Password:     "root",
-	//IP:           "127.0.0.1",
-	//Port:         "3306",
-	//DatabaseName: "print",
-	//Logger: logger.GetDefaultLogger(),
-	//})
+	mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
+		UserName:     "root",
+		Password:     "root",
+		IP:           "127.0.0.1",
+		Port:         "3306",
+		DatabaseName: "botter_user",
+		Logger:       logger.GetDefaultLogger(),
+	})
 }
 
 func main() {
-	XmThrowBottle("午睡。。刚睡醒。。。")
+
+	//XmThrowBottle("午睡。。刚睡醒。。。")
 	//RequestMap := &RequestMap{
 	//	Nickname: "吹过",
 	//	Sign:     "青春，像一把风吹过",
@@ -48,28 +49,6 @@ func main() {
 	//req, _ := mysqlClient.SearchMutiRows(&mysql.Stmt{Sql: "SELECT * FROM USER", Args: []interface{}{}})
 	//fmt.Println(req)
 	//bottlesInfo(token, bottlesUrl, userBaseUrl)
-	//userInfo(token, userBaseUrl)
+	userInfo(token, userBaseUrl)
 
-}
-
-type Request struct {
-	Status  int        `json:"status"`
-	Message string     `json:"message"`
-	Data    RequestMap `json:"data"`
-}
-
-type RequestMap struct {
-	Content    string `json:"content"`
-	Id         int    `json:"id"`
-	City       string `json:"city"`
-	Avatar     string `json:"avatar"`
-	Province   string `json:"province"`
-	Area       string `json:"area"`
-	Type       int    `json:"type"`
-	Difference int    `json:"difference"`
-	User_id    int    `json:"user_id"`
-	Nickname   string `json:"nickname"`
-	Phone      string `json:"phone"`
-	Sex        int    `json:"sex"`
-	Sign       string `json:"sign"`
 }
