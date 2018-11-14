@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"time"
 	"net/http"
@@ -50,14 +49,15 @@ func bottlesInfo(token string, bottlesUrl string, userBaseUrl string) {
 		userUrl := userBaseUrl + fmt.Sprint(bottles.Data.Id)
 		user := Get(userUrl, token)
 		fmt.Println(user.Data.Sex, "	", user.Data.Phone, "	", bottles.Data.Nickname, "	", bottles.Data.Province, "	", bottles.Data.City, "	", bottles.Data.Content)
-		fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/data.txt", os.O_WRONLY|os.O_APPEND, 0666)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fd_content := strings.Join([]string{fmt.Sprint(user.Data.Sex), user.Data.Phone, bottles.Data.Nickname, bottles.Data.Province, bottles.Data.City, bottles.Data.Area, bottles.Data.Content, "\n"}, "	")
-		buf := []byte(fd_content)
-		fd.Write(buf)
-		fd.Close()
+		XmThrowBottle(bottles.Data.Content)
+		//fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/data.txt", os.O_WRONLY|os.O_APPEND, 0666)
+		//if err != nil {
+		//	fmt.Println(err)
+		//}
+		//fd_content := strings.Join([]string{fmt.Sprint(user.Data.Sex), user.Data.Phone, bottles.Data.Nickname, bottles.Data.Province, bottles.Data.City, bottles.Data.Area, bottles.Data.Content, "\n"}, "	")
+		//buf := []byte(fd_content)
+		//fd.Write(buf)
+		//fd.Close()
 	}
 }
 
