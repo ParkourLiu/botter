@@ -6,6 +6,8 @@ import (
 	logger "mtcomm/log"
 	"time"
 	"github.com/robfig/cron"
+	"github.com/tjz101/goprop"
+	"flag"
 )
 
 const (
@@ -23,10 +25,19 @@ const (
 
 var (
 	mysqlClient mysql.MysqlClient
+	prop        *goprop.Prop
 	timeFlag    int
+	runTime     string
 )
 
 func init() {
+	propFile := flag.String("prop", "prop.properties", "properties file")
+	flag.Parse()
+	prop = goprop.NewProp()
+	prop.Read(*propFile)
+
+	runTime = prop.Get("runTime")
+
 	timeFlag = time.Now().Hour()
 	logger.SetDefaultLogLevel(1)
 	//mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
@@ -44,9 +55,8 @@ func main() {
 
 	//AddFunc
 
-	//拉取远端数据到学校端来(每个半点拉取一次，对应云端搜集数据，所以不可更改)
-	spec := "* 0/5 * * * ?"
-	c.AddFunc(spec, cronFunc)
+	//spec := "0 0/5 * * * ?"
+	c.AddFunc(runTime, cronFunc)
 
 	//启动计划任务
 	c.Start()
