@@ -5,6 +5,7 @@ import (
 	"mtcomm/db/mysql"
 	logger "mtcomm/log"
 	"time"
+	"github.com/robfig/cron"
 )
 
 const (
@@ -39,6 +40,23 @@ func init() {
 }
 
 func main() {
+	c := cron.New()
+
+	//AddFunc
+
+	//拉取远端数据到学校端来(每个半点拉取一次，对应云端搜集数据，所以不可更改)
+	spec := "* 0/5 * * * ?"
+	c.AddFunc(spec, cronFunc)
+
+	//启动计划任务
+	c.Start()
+
+	//关闭着计划任务, 但是不能关闭已经在执行中的任务.
+	defer c.Stop()
+	select {}
+}
+
+func cronFunc() {
 	//XmThrowBottle("午睡。。刚睡醒。。。")
 	//RequestMap := &RequestMap{
 	//	Nickname: "吹过",
@@ -52,5 +70,4 @@ func main() {
 	//fmt.Println(req)
 	bottlesInfo(token, bottlesUrl, userBaseUrl)
 	//userInfo(token, userBaseUrl)
-
 }
