@@ -28,14 +28,14 @@ var (
 func init() {
 	timeFlag = time.Now().Hour()
 	logger.SetDefaultLogLevel(1)
-	mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
-		UserName:     "root",
-		Password:     "root",
-		IP:           "127.0.0.1",
-		Port:         "3306",
-		DatabaseName: "botter_user",
-		Logger:       logger.GetDefaultLogger(),
-	})
+	//mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
+	//	UserName:     "root",
+	//	Password:     "root",
+	//	IP:           "127.0.0.1",
+	//	Port:         "3306",
+	//	DatabaseName: "botter_user",
+	//	Logger:       logger.GetDefaultLogger(),
+	//})
 }
 
 func main() {
