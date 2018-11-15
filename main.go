@@ -4,6 +4,7 @@ package main
 import (
 	"mtcomm/db/mysql"
 	logger "mtcomm/log"
+	"time"
 )
 
 const (
@@ -21,9 +22,11 @@ const (
 
 var (
 	mysqlClient mysql.MysqlClient
+	timeFlag    int
 )
 
 func init() {
+	timeFlag = time.Now().Hour()
 	logger.SetDefaultLogLevel(1)
 	mysqlClient = mysql.NewMysqlClient(&mysql.MysqlInfo{
 		UserName:     "root",
@@ -36,7 +39,6 @@ func init() {
 }
 
 func main() {
-
 	//XmThrowBottle("午睡。。刚睡醒。。。")
 	//RequestMap := &RequestMap{
 	//	Nickname: "吹过",

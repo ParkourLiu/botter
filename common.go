@@ -39,17 +39,28 @@ func userInfo(token string, userBaseUrl string) {
 }
 func bottlesInfo(token string, bottlesUrl string, userBaseUrl string) {
 	for ; ; {
-		bottles := Get(bottlesUrl, token)
+		bottles := Get(bottlesUrl, token) //得到随缘平台瓶子
 		//fmt.Println(bottles)
 		if bottles.Status != 200 {
 			//fmt.Println("爬光啦，等待。。。。")
 			time.Sleep(5 * time.Second)
 			continue
 		}
-		userUrl := userBaseUrl + fmt.Sprint(bottles.Data.Id)
-		user := Get(userUrl, token)
-		fmt.Println(user.Data.Sex, "	", user.Data.Phone, "	", bottles.Data.Nickname, "	", bottles.Data.Province, "	", bottles.Data.City, "	", bottles.Data.Content)
-		XmThrowBottle(bottles.Data.Content)
+		if time.Now().Hour()-timeFlag >= 1 { //每小时改一次名字
+			userUrl := userBaseUrl + fmt.Sprint(bottles.Data.User_id)
+			user := Get(userUrl, token) //得到扔此瓶子的人的信息
+			fmt.Println(user.Data.Id, "	", user.Data.Phone, "	", bottles.Data.Nickname, "	", bottles.Data.Province, "	", bottles.Data.City, "	", bottles.Data.Content)
+			RequestMap := &RequestMap{
+				Nickname: bottles.Data.Nickname,
+				Sign:     user.Data.Sign,
+				Province: user.Data.Province,
+				City:     user.Data.City,
+				Area:     user.Data.Area,
+			}
+			UpdateUser(RequestMap) //修改名字
+		}
+		XmThrowBottle(bottles.Data.Content) //扔出xm平台的瓶子
+
 		//fd, err := os.OpenFile("C:/Users/Parkour/go/src/test2/a_fffffff/data.txt", os.O_WRONLY|os.O_APPEND, 0666)
 		//if err != nil {
 		//	fmt.Println(err)
@@ -79,8 +90,8 @@ func Get(url string, token string) *Request {
 }
 
 func Post(method string, url string, param string, token string) *Request {
-	fmt.Println("url:", url)
-	fmt.Println("param:", param)
+	//fmt.Println("url:", url)
+	//fmt.Println("param:", param)
 	req, _ := http.NewRequest(method, url, bytes.NewReader([]byte(param)))
 	headMap := req.Header
 	headMap["token"] = append(headMap["token"], token)
@@ -131,5 +142,6 @@ func UpdateUser(requestMap *RequestMap) bool {
 func XmThrowBottle(content string) {
 	reqUrl := XmThrowBottleUrl + BottleContent + url.QueryEscape(content)
 	req := Post("POST", reqUrl, "{}", XmToken)
+	req.Data.Content = content
 	fmt.Println(req)
 }

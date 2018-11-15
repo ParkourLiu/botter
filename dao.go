@@ -3,7 +3,7 @@ package main
 import (
 	"mtcomm/db/mysql"
 	"bytes"
-	"github.com/golang/go/src/pkg/fmt"
+	"fmt"
 )
 
 type Request struct {
@@ -25,6 +25,7 @@ type RequestMap struct {
 	Phone      string `json:"phone"`
 	Sex        int    `json:"sex"`
 	Sign       string `json:"sign"`
+	User_id    int    `json:"user_id"`
 }
 
 func i_user(r *RequestMap) error {
