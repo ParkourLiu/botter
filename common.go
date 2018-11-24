@@ -129,8 +129,8 @@ func UpdateUser(requestMap *RequestMap) bool {
 		upUserUrl = strings.Replace(upUserUrl, "#", url.QueryEscape(v), 1)
 	}
 	req := Post("PUT", upUserUrl, "{}", XmToken)
-	fmt.Println(req)
 	if req.Status == 200 {
+		fmt.Println("修改名字成功：", req)
 		return true
 	}
 	return false
@@ -141,5 +141,7 @@ func XmThrowBottle(content string) {
 	reqUrl := XmThrowBottleUrl + BottleContent + url.QueryEscape(content)
 	req := Post("POST", reqUrl, "{}", XmToken)
 	req.Data.Content = content
-	fmt.Println(req)
+	count++
+	timeStr := time.Now().Format("2006-01-02 15:04:05")
+	fmt.Println(count, "■", timeStr, "■", req)
 }

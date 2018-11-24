@@ -28,6 +28,7 @@ var (
 	prop        *goprop.Prop
 	timeFlag    int
 	runTime     string
+	count       int
 )
 
 func init() {
