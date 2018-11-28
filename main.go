@@ -68,6 +68,9 @@ func main() {
 }
 
 func cronFunc() {
+	if time.Now().Hour() < 1 {
+		return
+	}
 	//XmThrowBottle("午睡。。刚睡醒。。。")
 	//RequestMap := &RequestMap{
 	//	Nickname: "吹过",
